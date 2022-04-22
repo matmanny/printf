@@ -3,7 +3,7 @@
 /**
  * _printf - prints all user inputs 
  * @format: character string
- * Return: 0 upon success
+ * Return: the number of characters printed
  */
 int _printf(const char *format, ...)
 {
