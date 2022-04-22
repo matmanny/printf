@@ -1,1 +1,1 @@
-Printf
+A sample version of C lang stdlib's printf.

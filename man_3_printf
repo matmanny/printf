@@ -1,102 +1,77 @@
-.TH man 3 "19 April 2022" "HOLBERTON SCHOOL" "_PRINTF"
+npage for _printf().
+.\" Contact Steven or Joann for corrections.
+.TH man _printf "19 June 2017" "1.0" "Holberton School _printf function"
 .SH NAME
-.B _printf
-- formatted output conversion
+_printf - this function is meant to emulate printf, and will format and print user provided data to standard output.
+
 .SH SYNOPSIS
-.B #include \(dqholberton.h\(dq
-.sp
-.B int _printf(const char *
-.I format
-.B , ...);
+.B #include "holberton.h"
+
+.B int _print_mod(va_list list);
+
+.B int _print_string(va_list list);
+
+.B int _print_char(va_list list);
+
+.B int _print_d_i(va_list list);
+
+.B int _printf(const char *format, ...);
+
+.B #include <stdarg.h>
+
+.B #include <unistd.h>
+
+.B #include <stdlib.h>
+
+.B #include <stdio.h>
+
 .SH DESCRIPTION
-The function _printf is a variadic function that produces a string according to a
-.I format
-and prints it to the standard output, much like the C standard library function printf. It can receive a variable number of arguments.
-This function has been created in the context of a first-year project for Holberton School.
-.sp
+.B _printf("%", variable)
+.PP
+The function _printf will print output according to the format described below. Output is written to std out.
+.PP
+This function writes the output under the control of a format string that specifies how subsequent arguments (or arguments accessed via the
+variable-length argument facilities of stdarg(3)) are converted for output.
+
 .B Return value
-.sp
-On success, _printf returns the number of characters printed. If
-.I format
-is NULL or if the functions encounters any errors, it returns -1.
-.sp
+.PP
+If the return is successful, _printf will return the number of characters printed (not including the null byte used to end output to strings).
+.PP
+_printf will return a negative value if an error is encountered.
+
 .B Format of the format string
-.sp
-The format string can contain any characters, just like a regular string, in double quotes, which will be printed as is. For example, _printf(\(dqHello\(dq) will print: Hello.
-However, this format string can contain
-.I conversion specifiers.
-These start with a %, and are followed with a character (see
-.I conversion specifiers
-). Special characters like a new line are escaped, for example _printf(\(dq\\n\(dq) will print a new line.
-.sp
-.B Conversion specifiers
-.sp
-These are the characters that specify the type of the variable that needs to be printed. The variables to be printed are separated from the format string with a comma. Each variable passed to _printf need to have a conversion specifier.
-.sp
-.B i, d
-- Both these specifiers are for
-.I int
-arguments. They convert the variable to a decimal number, positive or negative.
-.sp
-.B c
-- Prints a
-.I single character.
-.sp
-.B s
-- Prints an entire
-.I string.
-.sp
-.B u
-- Prints an
-.I unsigned int.
-.sp
-.B x, X
-- Respecively print a number in lowercase and uppercase
-.I hexadecimal
-base.
-.sp
-.B o, b
-- Respectively print a number in
-.I octal
-and
-.I binary
-base.
-.sp
-.B %
-- Acts like an escape for the character %. To print \(dq%\(dq, the format string should contain \(dq%%\(dq.
-.sp
-.B r, R
-- Respectively print a string in reverse and in ROT13 encryption.
-.sp
-.B S
-- Prints a string, but non-printable characters are printed this way: \\x, followed by the ASCII code value in uppercase hexadecimal.
-.sp
-.B p
-- Prints an address, given by a pointer variable
-.sp
-.B Flag characters for conversion specifiers
-.sp
-.B +
-- Prints a plus sign in front of positive signed integers and a minus sign in front of negative signed integers.
- + overrides a space when both flags are given.
-.sp
-.B ' '
-- Prints a space in front of signed integers.
-.sp
-.B #
-- Modifier for unsigned conversions. For x, prepends \(dq0x\(dq, and for X, prepends \(dq0X\(dq. For o, if the converted number doesn't already begin with a 0, prepends a 0.
-.sp
-.SH SEE ALSO
-.I printf(3)
-.I _putchar.c
+.PP
+The format string is a character string, composed of zero or more Directives: ordinary characters (not %) that are copied unchanged to the output stream, and the conver\
+sion specifier which calls on subsequent arguments. Each conversion begins the character %, and ends with a specifier.
+.PP
+The arguments must be entered in the correct order, according to the conversion specifier. The arguments  are  processed in the order they are given. An error will be p\
+roduced if an insufficient number of arguments is passed.
+
+.B Flag characters
+.PP
+Flag characters are not accommodated by this function.
+
+.B The conversion specifier
+.PP
+A conversion specifier is a character that specifies the type of conversion to be applied. The conversion specifiers are:
+.IP d,i
+The int argument is converted to signed decimal notation.
+
+.IP c
+The int argument is converted to an unsigned char, and the resulting character is written.
+
+.IP s
+The const char * argument is expected to be a pointer to a string (an array of character type) Characters from the array are written up to a terminating null byte (but \
+the '\0' is not incuded).
+
+.IP %
+% is written. Argument conversion does not occur. The conversion specification is '%%'
+
 .SH NOTES
-_printf uses a custom character printing function called _putchar, that uses the system call write(). 
-_putchar uses a static buffer of 1024 bytes and a static incrementing variable. 
-That way, everytime _putchar is called inside _printf, the character is stored inside the buffer and the function moves to the next character, 
-until _printf calls _putchar(-1), which \(dqflushes\(dq the buffer and resets the incrementing variable to 0. 
-That way, _putchar only needs to call write one time, passing to it the whole buffer and the number of bytes in it, which is given by the value of the incrementing variable.
-.sp
+Not all edge cases will be accommodated by the _printf function.
+
 .SH BUGS
-_printf does not take care of length and precision modifiers yet. For example, _printf(\(dq%hx\(dq) will not produce the same output as the call to the standard library printf.
+No known bugs.
+
 .SH AUTHORS
-Matyias fekade Admasu and Beamlak Mekonnen
+Steven Coyne and Joann Vuong
