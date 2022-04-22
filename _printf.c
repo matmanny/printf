@@ -1,48 +1,56 @@
-#include "bootcamp.h"
+#include "holberton.h"
+
 /**
- * _printf - replication of some of the features from C function printf()
- * @format: character string of directives, flags, modifiers, & specifiers
- * Description: This function uses the variable arguments functionality and is
- * supposed to resemble printf().  Please review the README for more
- * information on how it works.
- * Return: number of characters printed
+ * _printf - prints all user inputs 
+ * @format: character string
+ * Return: 0 upon success
  */
 int _printf(const char *format, ...)
 {
-	va_list args_list;
-	inventory_t *inv;
-	void (*temp_func)(inventory_t *);
+	va_list list;
+	unsigned int x = 0, y = 0, counter = 0;
+	unsigned int flag;
+	match_t matches[] = {
+		{"%", _print_mod}, {"c", _print_char}, {"s", _print_string},
+		{"d", _print_d_i}, {"i", _print_d_i}, {"r", _print_rev}, 
+		{"R", _print_rot13}, {NULL, NULL}
+	};
 
-	if (!format)
-		return (-1);
-	va_start(args_list, format);
-	inv = build_inventory(&args_list, format);
-
-	while (inv && format[inv->i] && !inv->error)
-	{
-		inv->c0 = format[inv->i];
-		if (inv->c0 != '%')
-			write_buffer(inv);
+	va_start(list, format);
+	if (format == NULL || (format[y] == '%' && format[y] == '\0'))
+		return (0);
+	while (format[y] != '\0')
+	{ 
+		flag = 0;
+		if (format[y] == '%')
+		{
+			x = 0;
+			while (matches[x].identifier != NULL && flag == 0)
+			{
+				if (*(matches[x].identifier) == format[y + 1])
+				{
+					counter += (matches[x].function(list));
+					flag = 1;
+				}
+				else
+					x++;
+			}
+			if (matches[x].identifier == NULL)
+			{
+				_putchar(format[y]);
+				counter += 1;
+				_putchar(format[y + 1]);
+				counter += 1;
+			}
+			y = y + 2;
+		}
 		else
 		{
-			parse_specifiers(inv);
-			temp_func = match_specifier(inv);
-			if (temp_func)
-				temp_func(inv);
-			else if (inv->c1)
-			{
-				if (inv->flag)
-					inv->flag = 0;
-				write_buffer(inv);
-			}
-			else
-			{
-				if (inv->space)
-					inv->buffer[--(inv->buf_index)] = '\0';
-				inv->error = 1;
-			}
+			_putchar(format[y]);
+			counter = counter + 1;
+			y++;
 		}
-		inv->i++;
 	}
-	return (end_func(inv));
+	va_end(list);
+	return (counter);
 }
