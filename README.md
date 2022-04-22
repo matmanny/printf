@@ -1,1 +1,1 @@
-A simple C lang stdlib printf clone.
+Printf
